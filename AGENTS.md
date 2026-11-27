@@ -84,31 +84,33 @@ See [ADR 0001](docs/adr/0001-ui-stack.md).
 - Before writing HTML, CSS or client-side JS, consult Modern Web Guidance
   (`npx -y modern-web-guidance@latest search "<query>"`, then `retrieve`).
 - No Tailwind, no CSS-in-JS, no component library. Plain CSS on the project's tokens.
+- No remote content in the window; keep the CSP strict.
+- No `{@html}` in Svelte templates (Trusted Types, ADR 0001).
 
 ### CSS ([ADR 0002](docs/adr/0002-css-architecture.md))
 
 - One owner per rule: `.pt-*` primitives in `src/styles/components/*.css`; no `<style>` in
-  `src/components/*.svelte` (except `TelemetryChart.svelte`); view `<style>` blocks are for local
-  layout only and land in `@layer views`.
-- `src/styles/index.css` holds the only `@layer` statement. Never write `@layer`, `@property` or
-  `:global()` anywhere else.
-- No raw color or magic number outside `tokens.css`: use tokens and `light-dark()`. Never
-  `color-mix(in oklch, …)`.
+  `src/components/*.svelte`; view `<style>` blocks are for local layout only and land in
+  `@layer views`.
+- `src/styles/index.css` holds the only `@layer` statement and `src/styles/properties.css` holds
+  every `@property`. Never write `@layer`, `@property` or `:global()` anywhere else.
+- No raw color or magic number outside `tokens.css`: elsewhere, use its tokens (which carry the
+  light/dark pairs). Never `color-mix(in oklch, …)`.
 - A new or changed token is changed in `tokens.css` and `DESIGN.md` together.
 - Flat class names (`.pt-<component>[-<part>]`), `data-variant`/`data-tone`/`data-size` for
   variants, native pseudo-classes, ARIA attributes and `:has()` for state. No BEM, no state classes.
-- Utilities are the closed list in ADR 0002. Adding one needs the owner's approval.
+- Utilities are exactly the six listed in ADR 0002. Adding one needs the owner's approval, a new
+  ADR that supersedes that part of ADR 0002, and a `DESIGN.md` update.
 - No `*` reset, ID selector, `!important` (except `.u-sr-only`), `outline: none`,
   `transition: all` or `scrollbar-width: thin`.
-- Logical properties, `rem` sizes, unitless `line-height`, `min-block-size` rather than a fixed
-  `height` on text containers; never set `font-size` on `html` or `:root`.
+- Logical properties only (no `left`/`right`/`top`/`bottom` margins, paddings or borders), `rem`
+  sizes, unitless `line-height`, `min-block-size` rather than a fixed `height` on text containers;
+  never set `font-size` on `html` or `:root`.
 - Every interactive control styles hover, active, disabled, `:focus-visible` (outline, 3:1
   contrast) and `forced-colors`, and puts spatial motion under
   `@media (prefers-reduced-motion: no-preference)`.
-- No `{@html}` in Svelte templates (Trusted Types, ADR 0001).
 - Before pushing UI work, run the CSS lint, `svelte-check`, the architecture and token-sync checks
   and `design.md lint`.
-- No remote content in the window; keep the CSP strict.
 
 ## Delegation to other agents
 

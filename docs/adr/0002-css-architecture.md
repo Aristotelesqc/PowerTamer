@@ -22,13 +22,18 @@ scaffold chooses another root.
 | Tokens | `src/styles/tokens.css` | `tokens` |
 | `@property` registrations | `src/styles/properties.css` | none (top level) |
 | Targeted normalisation | `src/styles/reset.css` | `reset` |
-| Page base: Mica canvas, type ramp, global `:focus-visible`, icon engine | `src/styles/base.css`, `icons.css` | `base` |
+| Page base: Mica canvas, type ramp, global `:focus-visible`, icon variables | `src/styles/base.css`, `icons.css` | `base` |
 | Reusable primitives (`.pt-*`) | `src/styles/components/<name>.css`, one file per primitive | `components` |
 | View-local layout | `<style>` in `src/views/*.svelte`, wrapped in `@layer views` by a Svelte preprocessor | `views` |
 | Utilities (`.u-*`) | `src/styles/utilities.css` | `utilities` |
 
 Components in `src/components/*.svelte` have no `<style>` block; their styles are the `.pt-*` files.
-`TelemetryChart.svelte` is the one listed exception.
+No exception: the chart's styles are `components/telemetry-chart.css`, and uPlot's own stylesheet is
+imported by `index.css` into the `components` layer, before `telemetry-chart.css`.
+
+Icons are the `.pt-icon` primitive (`components/icon.css`): an element with `class="pt-icon"` and
+the icon chosen through a custom property (`style="--icon: var(--icon-chevron-right)"`), drawn as a
+`currentColor` mask. The icon variables live in `icons.css`, in the `base` layer.
 
 ### Layers
 
@@ -60,7 +65,7 @@ layers with `@import "…" layer(…)`. No other file declares `@layer`. Vite bu
 | Primitive | `.pt-<component>` (`.pt-button`, `.pt-switch`, `.pt-card`) |
 | Structural part | `.pt-<component>-<part>` (`.pt-card-title`), only when the HTML element is not enough |
 | Variant, tone, size | `data-variant`, `data-tone`, `data-size` |
-| Interaction and form state | native pseudo-classes: `:hover:not(:disabled)`, `:active`, `:focus-visible`, `:disabled`, `:checked`, `:user-invalid`, `:open`, `:popover-open`, `:modal` |
+| Interaction and form state | native pseudo-classes: `:hover:not(:disabled)`, `:active:not(:disabled)`, `:focus-visible`, `:disabled`, `:checked`, `:user-invalid`, `:open`, `:popover-open`, `:modal` |
 | Widget state | ARIA attributes as selectors: `[aria-expanded="true"]`, `[aria-current="page"]` |
 | Child presence or state | `:has()` |
 | Available space | container queries |
@@ -70,10 +75,11 @@ cannot disagree with what assistive technology reads.
 
 ### Utilities
 
-A closed list of six: `.u-stack`, `.u-cluster`, `.u-sr-only`, `.u-tabular`, `.u-truncate`,
+Exactly six: `.u-stack`, `.u-cluster`, `.u-sr-only`, `.u-tabular`, `.u-truncate`,
 `.u-scroll-region`. A utility encodes a layout primitive, an accessibility behaviour or a
-typographic rule, never a single visual property. A check fails above eight and on any cosmetic
-property; adding one needs the owner's approval and a `DESIGN.md` update.
+typographic rule, never a single visual property. A check fails when `utilities.css` declares any
+other `.u-*` class or a cosmetic property. Adding one needs the owner's approval, a new ADR that
+supersedes this list, and a `DESIGN.md` update.
 
 ### Enforcement
 
@@ -81,8 +87,9 @@ property; adding one needs the owner's approval and a `DESIGN.md` update.
   `stylelint-declaration-strict-value`; `no-unknown-custom-properties` with `referenceFiles`
   pointing at the token files. Rules forbid raw colors and magic values outside `tokens.css`,
   unknown layers, `@layer`/`@property`/`:global()` outside their owner, `!important` (except
-  `.u-sr-only`), ID selectors, physical margin/padding properties, `transition: all`,
-  `outline: none`, and `color-mix(in oklch`. Per-file overrides enforce the `.pt-*` and `.u-*`
+  `.u-sr-only`, through a per-file override), ID selectors, the `*` selector, physical
+  properties where a logical one exists, `transition: all`, `outline: none`,
+  `scrollbar-width: thin`, and `color-mix(in oklch`. Per-file overrides enforce the `.pt-*` and `.u-*`
   class patterns and keep those prefixes out of view `<style>` blocks.
 - `svelte-check --fail-on-warnings` in runes mode (Svelte 4 syntax, `a11y_*`, unused selectors).
 - An architecture check fails on a `<style>` block in a component, on `font-size` set on
@@ -90,8 +97,11 @@ property; adding one needs the owner's approval and a `DESIGN.md` update.
   limits above.
 - `tokens.css` is the executable source of values. `DESIGN.md` uses the canonical schema of
   `@google/design.md` (its front matter keys and eight sections) and must pass
-  `design.md lint`; a sync check fails when a token or a `.pt-*`/`.u-*` class exists on one side
-  only or when values differ.
+  `design.md lint`. A sync check compares what that schema can hold (for example colors,
+  typography, spacing, radii and documented components) and fails when a covered token exists on
+  one side only or when values differ. What the schema cannot express (light/dark pairs, the
+  runtime accent, `forced-colors`) is described in `DESIGN.md` prose and checked only in
+  `tokens.css`; the exact split is settled at the prototype.
 
 ## Rejected
 
@@ -110,6 +120,9 @@ property; adding one needs the owner's approval and a `DESIGN.md` update.
   `vite dev` and `vite build`.
 - Vite's inlining of `@import "…" layer(…)`.
 - Stylelint 18 with the two plugins (the research assumed Stylelint 16).
+- What `design.md lint` accepts for light/dark pairs and component entries (`design.md spec`),
+  which fixes the scope of the sync check.
+- uPlot's stylesheet inside the `components` layer.
 - The WinUI 3 values the research could not read in the XAML source.
 - `forced-colors` rendering of the switch and the accent button in the four Windows 11 contrast
   themes.
