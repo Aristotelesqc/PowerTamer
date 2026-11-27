@@ -38,7 +38,9 @@ they are not decisions. Cite the ADR, not the research report.
 - Pull requests follow `.github/pull_request_template.md` and name the issues they advance
   (`Refs #N`) or close (`Closes #N`, only when every acceptance criterion is met), or say
   `No issue:` with a one-line reason.
-- Only the owner merges into `main`. Never force-push, rewrite or reset `main`.
+- Merging into `main` needs the owner's explicit approval for that pull request. With it, an agent
+  may merge; without it, nobody does. Approval for one pull request does not extend to another, and
+  auto-merge is never enabled without the owner asking. Never force-push, rewrite or reset `main`.
 - Review reports (code review, audit, verification of a pull request) are posted as comments on
   the pull request or issue concerned, naming the commit SHA they examined. They are not committed.
 - Run the checks that exist for the touched area before every push; a red push is fixed first.
