@@ -44,7 +44,8 @@ model wrote it, except for links.
   `No issue:` with a one-line reason.
 - A pull request may be stacked on another when it extends it: say so in its summary and never
   merge it before its base. Merge with a merge commit (no squash, no rebase-merge) so the stack
-  stays valid, then retarget the next pull request to `main`.
+  stays valid. After the base merges, retarget the stacked pull request to `main` before deleting
+  the base branch: deleting it first makes GitHub close the stacked pull request.
 - Merging into `main` needs the owner's explicit approval for that pull request. With it, an agent
   may merge; without it, nobody does. Approval for one pull request does not extend to another, and
   auto-merge is never enabled without the owner asking. Never force-push, rewrite or reset `main`.
