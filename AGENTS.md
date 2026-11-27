@@ -44,8 +44,11 @@ model wrote it, except for links.
   `No issue:` with a one-line reason.
 - A pull request may be stacked on another when it extends it: say so in its summary and never
   merge it before its base. Merge with a merge commit (no squash, no rebase-merge) so the stack
-  stays valid. After the base merges, retarget the stacked pull request to `main` before deleting
-  the base branch: deleting it first makes GitHub close the stacked pull request.
+  stays valid. Merge the base without deleting its branch (no `gh pr merge --delete-branch`; the
+  repository's automatic deletion of head branches stays off). Then retarget the pull request
+  stacked directly on it to the merged pull request's base (usually `main`), and only then delete
+  the merged branch. Deleting a base branch through the CLI or the API makes GitHub close the
+  pull requests that target it instead of retargeting them.
 - Merging into `main` needs the owner's explicit approval for that pull request. With it, an agent
   may merge; without it, nobody does. Approval for one pull request does not extend to another, and
   auto-merge is never enabled without the owner asking. Never force-push, rewrite or reset `main`.
