@@ -20,12 +20,12 @@ code will be written by AI agents.
 | Shell | Tauri 2 on evergreen WebView2, Windows 11 only |
 | Framework | Svelte 5 in runes mode (`runes: true`), TypeScript strict, Vite |
 | Styling | Plain modern CSS: cascade layers, custom properties, nesting, container queries, `light-dark()`, `forced-colors`. No Tailwind |
-| Components | About 10–12 in-house Svelte components on native HTML (`<dialog>`, `[popover]`, `<select>` with `appearance: base-select`, `<input type="range">`, `<details>`), styled after WinUI 3 theme resources |
+| Components | About 10–12 in-house Svelte components on native HTML (`<dialog>`, `[popover]`, `<select>` with `appearance: base-select`, `<input type="range">`, `<details>`, switches on `<input type="checkbox" role="switch">` since the `switch` attribute is not in Chromium), styled after WinUI 3 theme resources |
 | Icons | Fluent UI System Icons, only the SVGs used |
 | Charts | uPlot, wrapped in `<figure>` with a text table and a pause control |
 | Windows integration | Mica backdrop, native title bar (`decorations: true`), accent ramp read in Rust (WinRT `UISettings`) and pushed as custom properties, system font Segoe UI Variable |
 | IPC | The UI's Rust side is the only client of the core's named pipe; Tauri commands for settings, a Tauri `Channel` for telemetry |
-| Security | Strict local CSP with Trusted Types, no remote content, minimal capabilities, `withGlobalTauri: false`. No `{@html}` in Svelte templates |
+| Security | Strict local CSP (`default-src 'none'`, local scripts and styles only, `require-trusted-types-for 'script'; trusted-types 'none'`), Svelte `fragments: 'tree'`, no `{@html}`, no remote content, minimal capabilities scoped to the window, `withGlobalTauri: false`, `freezePrototype: true` |
 | Design language | Root `DESIGN.md` in Google's DESIGN.md format, using its canonical front matter and sections so `@google/design.md lint` passes; Fluent 2 as on Windows 11 |
 
 ## Rejected
