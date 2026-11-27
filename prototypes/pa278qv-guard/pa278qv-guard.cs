@@ -4,7 +4,9 @@
 //                          The delay is read from the active power plan at each lock (lock-screen display
 //                          timeout, else the normal display timeout), so it follows Windows settings.
 // - displays turned off -> monitor off (Windows display-state notification, no timer)
-// - session unlocked, or displays back on while unlocked -> monitor on (VCP 0xD6 = 1), only if we turned it off
+// - displays back on (input, even at the lock screen) or session unlocked -> monitor on (VCP 0xD6 = 1),
+//                          only if we turned it off. Waking at the lock screen matters for a Windows Hello
+//                          webcam on the monitor's USB hub; if nobody unlocks, the lock timer runs again.
 // Usage:  pa278qv-guard.exe [hardware-id]   (default AUS2700)   Log: %USERPROFILE%\Diag\pa278qv-guard.log
 // Build:  C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /nologo /target:winexe /out:pa278qv-guard.exe pa278qv-guard.cs
 using System;
@@ -94,7 +96,14 @@ public class MonitorGuard : Form {
       if (g == GUID_CONSOLE_DISPLAY_STATE) {
         int state = Marshal.ReadInt32(m.LParam, 20);
         if (state == 0) { Log("displays off"); Off("displays off"); }
-        else if (state == 1) { Log("displays on"); if (!locked) On("displays on"); }
+        else if (state == 1) {
+          Log("displays on");
+          // Turn it back on even while locked: a webcam on the monitor's USB hub (Windows Hello)
+          // only gets power when the monitor is on. If nobody unlocks, turn it off again before
+          // Windows turns the displays off.
+          On(locked ? "displays on at lock screen" : "displays on");
+          if (locked) StartLockTimer();
+        }
       }
     }
     base.WndProc(ref m);

@@ -40,6 +40,9 @@ than `SetThreadExecutionState`, so `powercfg /requests` shows why the PC stays u
   `DISPLAY_DEVICE_ACTIVE` (a monitor turned off over DDC must still be found to turn it back on).
 - Events, no polling: `WTSRegisterSessionNotification` (lock/unlock) and
   `RegisterPowerSettingNotification(GUID_CONSOLE_DISPLAY_STATE)` (displays off/on).
+- Turn a monitor back on as soon as the displays come back on, even at the lock screen: a Windows
+  Hello webcam plugged into the monitor's USB hub has no power while the monitor is off over DDC.
+  If nobody unlocks, turn it off again before the lock-screen timeout.
 - A quirks table per model: for example "turn off over DDC before Windows does, or it hot-plug
   loops on DisplayPort".
 
