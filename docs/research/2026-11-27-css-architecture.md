@@ -4,6 +4,7 @@
 > - Confirmed: Stylelint's `referenceFiles` option exists and feeds `no-unknown-custom-properties`; `@google/design.md` (0.4.0, CLI `design.md`), `stylelint-declaration-strict-value` (1.13.0) and `stylelint-config-html` (2.0.0) exist.
 > - Caution: Stylelint is at 18.1.0, not 16; plugin compatibility with 18 must be checked at install.
 > - Correction from the fact-check on PR #2: `DESIGN.md` must use the canonical schema of `@google/design.md` (front matter keys, 8 English sections). The DESIGN.md sync design in section 7.3 must follow that schema.
+> - Inconsistencies inside the report (found in review; ADR 0002 resolves them, don't copy the examples as is): its Stylelint config forbids `!important` with no override for `.u-sr-only`; the `SettingsCard` example uses an `.icon` class outside the `.pt-*` scheme; the `ToggleSwitch` example hard-codes French UI strings; the architecture check allows `--control-value` while the slider section uses `attr()` and `progress()`.
 > - Unverified: the Svelte preprocessor that wraps view `<style>` blocks in `@layer views`, Vite's inlining of `@import ... layer()`, and several WinUI 3 token values (the report flags them itself). All need the first prototype.
 # Architecture du système CSS natif pour PowerTamer (`powertamer-ui`)
 
