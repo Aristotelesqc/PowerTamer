@@ -23,6 +23,10 @@ model wrote it, except for links.
 - Dates written in the repository or on GitHub are in **UTC**, ISO form (`2026-11-27`,
   `2026-11-27T19:46Z`). Take them from the clock, never from memory. No relative time words
   ("yesterday", "recently") in the repository.
+- No user-facing text in code, in the settings window or in the core's tray menu and
+  notifications ([ADR 0003](docs/adr/0003-interface-language.md)): message keys namespaced by
+  section, an English source catalog, a French catalog with exactly the same keys. The core sends
+  codes and data to the window, never sentences.
 - No new dependency without a demonstrated need, named in the pull request.
 - No fixed-interval polling in the core: react to Windows notifications (spec, principle 6).
 - Read settings from Windows at the moment they matter; never hardcode a timeout or a device.
