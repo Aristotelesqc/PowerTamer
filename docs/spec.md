@@ -14,7 +14,25 @@ and on the [PA278QV guard prototype](../prototypes/pa278qv-guard/).
    processes must keep working.
 4. **No admin for the core.** Keep-awake, tiers, DDC/CI and plan switching run as the user.
    Anything that needs elevation lives in an optional module.
-5. **Lightweight native exe.** Likely Rust. No service unless a module needs one.
+5. **Lightweight native exe.** Rust. No service unless a module needs one.
+6. **No fixed-interval polling.** React to Windows notifications. Idle time sends no event, so
+   schedule the next check from the time left before the next tier instead of checking every second.
+
+## Architecture
+
+Three executables; only the first one runs all the time.
+
+| Executable | Runs | Role |
+|---|---|---|
+| `powertamer` (core) | Always, as the user | State, rules, tiers, keep-awake, DDC/CI, plan switching. Owns the tray icon: native `Shell_NotifyIcon` with a native popup menu (current tier, keep-awake toggle, open settings, quit) |
+| `powertamer-ui` | Only while the settings window is open | Tauri + WebView2. Holds no logic: reads and changes the core's state over a local named pipe. Closing the window ends the process; it has no tray icon of its own |
+| `powertamer-elevated` | On demand, optional | Admin-only actions (GPU limits, writing plan values). Started through a scheduled task created once with highest privileges, so there is one UAC prompt at setup and none after |
+
+Rules for the UI process:
+- Local content only, no remote pages, strict CSP: a web view that can reach a process able to
+  change power settings must load nothing but its own files.
+- Its cost (WebView2 processes, roughly 100–200 MB) only exists while the window is open.
+- Keeping the UI behind the pipe means its technology can change without touching the core.
 
 ## Tiers
 
