@@ -74,6 +74,19 @@ GitHub issues are the only tracking system.
   partial merge and only the last pull request says `Closes`. A merged pull request does not close
   an issue unless its acceptance is fully met.
 
+## Settings window (`powertamer-ui`)
+
+See [ADR 0001](docs/adr/0001-ui-stack.md).
+
+- Browser support: evergreen WebView2 on Windows 11 only. Features shipped in current Chromium
+  are used without fallbacks or polyfills. Exception: `<input type="checkbox" switch>` is not in
+  Chromium; build switches on `<input type="checkbox" role="switch">`.
+- Before writing HTML, CSS or client-side JS, consult Modern Web Guidance
+  (`npx -y modern-web-guidance@latest search "<query>"`, then `retrieve`).
+- No Tailwind, no CSS-in-JS, no component library. Plain CSS on the project's tokens; the CSS
+  architecture rules will be added here with their ADR.
+- No remote content in the window; keep the CSP strict.
+
 ## Delegation to other agents
 
 - One writer at a time for overlapping files.
