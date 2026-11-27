@@ -9,13 +9,17 @@
 3. `DESIGN.md` (once added): visual language and tokens of the settings window.
 4. GitHub issues: needs and backlog. Issues describe needs, not decisions.
 
-`docs/research/` holds research inputs (with their prompt and provenance). They inform decisions;
-they are not decisions. Cite the ADR, not the research report.
+`docs/research/` holds research inputs. They inform decisions; they are not decisions. Cite the
+ADR, not the research report. A new report goes to `docs/research/YYYY-MM-DD-<topic>.md`, its
+prompt to `YYYY-MM-DD-<topic>-prompt.md`, and the report starts with a provenance block (model,
+date, revision examined) and the coordinator's verification notes. The report body stays as the
+model wrote it, except for links.
 
 ## Rules
 
 - English everywhere in the repository and on GitHub: code, comments, docs, commit messages,
-  issues, pull requests.
+  issues, pull requests. Exception: a research report in `docs/research/` may be in the language
+  its prompt asked for; its provenance block and notes are in English.
 - Dates written in the repository or on GitHub are in **UTC**, ISO form (`2026-11-27`,
   `2026-11-27T19:46Z`). Take them from the clock, never from memory. No relative time words
   ("yesterday", "recently") in the repository.
@@ -38,6 +42,9 @@ they are not decisions. Cite the ADR, not the research report.
 - Pull requests follow `.github/pull_request_template.md` and name the issues they advance
   (`Refs #N`) or close (`Closes #N`, only when every acceptance criterion is met), or say
   `No issue:` with a one-line reason.
+- A pull request may be stacked on another when it extends it: say so in its summary and never
+  merge it before its base. Merge with a merge commit (no squash, no rebase-merge) so the stack
+  stays valid, then retarget the next pull request to `main`.
 - Merging into `main` needs the owner's explicit approval for that pull request. With it, an agent
   may merge; without it, nobody does. Approval for one pull request does not extend to another, and
   auto-merge is never enabled without the owner asking. Never force-push, rewrite or reset `main`.
@@ -49,16 +56,23 @@ they are not decisions. Cite the ADR, not the research report.
 
 GitHub issues are the only tracking system.
 
-- `status:backlog`, `status:ready`, `status:in-progress`, `status:review`, `status:blocked`
-  (say why in a comment), `status:verified`. Every open issue has exactly one.
-- `area:core`, `area:monitors`, `area:cpu`, `area:gpu`, `area:ui`, `area:platform` (build, CI,
-  dependencies, packaging), `area:docs`, `area:governance`.
+- Status, exactly one per open issue:
+  - `status:backlog`: accepted, not planned;
+  - `status:ready`: acceptance and evidence are clear, work can start;
+  - `status:in-progress`: someone works on it;
+  - `status:review`: its pull request awaits review;
+  - `status:blocked`: say why in a comment;
+  - `status:verified`: acceptance shown in a comment, waiting for the owner to close it.
+- Area, at least one per issue: `area:core`, `area:monitors`, `area:cpu`, `area:gpu`, `area:ui`,
+  `area:platform` (build, CI, dependencies, packaging), `area:docs`, `area:governance`.
+- `priority:p0` to `priority:p3`: set by the owner only; an agent may propose one in a comment.
 - Workstreams are parent issues; a slice that one pull request can deliver is a GitHub sub-issue
   of its parent, one level deep. A sub-issue's body names its parent (`Parent #N`). A parent is
   done when its own acceptance is shown, not because its sub-issues are closed.
-- `priority:p0` to `priority:p3`: set by the owner only; an agent may propose one in a comment.
-- Starting work sets `status:in-progress`; opening its pull request sets `status:review`. A merged
-  pull request does not close an issue by itself unless its acceptance is fully met.
+- Starting work sets `status:in-progress`; opening its pull request sets `status:review`. When a
+  slice needs more than one pull request, the issue goes back to `status:in-progress` after each
+  partial merge and only the last pull request says `Closes`. A merged pull request does not close
+  an issue unless its acceptance is fully met.
 
 ## Settings window (`powertamer-ui`)
 
