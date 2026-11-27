@@ -3,7 +3,8 @@
 - Status: accepted
 - Date: 2026-11-27
 - Research: [UI stack decision](../research/2026-11-27-ui-stack-decision.md) (Gemini 4 Neon, with
-  caller verification notes); a fact-check of its remaining claims is pending.
+  caller verification notes); fact-check by Gemini 4 Hydrogen posted on
+  [PR #2](https://github.com/Aristotelesqc/PowerTamer/pull/2#issuecomment-7226999777).
 
 ## Context
 
@@ -24,8 +25,8 @@ code will be written by AI agents.
 | Charts | uPlot, wrapped in `<figure>` with a text table and a pause control |
 | Windows integration | Mica backdrop, native title bar (`decorations: true`), accent ramp read in Rust (WinRT `UISettings`) and pushed as custom properties, system font Segoe UI Variable |
 | IPC | The UI's Rust side is the only client of the core's named pipe; Tauri commands for settings, a Tauri `Channel` for telemetry |
-| Security | Strict local CSP, no remote content, minimal capabilities, `withGlobalTauri: false` |
-| Design language | Root `DESIGN.md` in Google's DESIGN.md format, Fluent 2 as on Windows 11 |
+| Security | Strict local CSP with Trusted Types, no remote content, minimal capabilities, `withGlobalTauri: false`. No `{@html}` in Svelte templates |
+| Design language | Root `DESIGN.md` in Google's DESIGN.md format, using its canonical front matter and sections so `@google/design.md lint` passes; Fluent 2 as on Windows 11 |
 
 ## Rejected
 
@@ -42,5 +43,9 @@ code will be written by AI agents.
 
 - A CSS architecture with reusable classes and enforced rules is needed (research pending; its
   rules go into `AGENTS.md` with a follow-up ADR).
-- `require-trusted-types-for 'script'` needs Svelte's `fragments: 'tree'` (Svelte 5.33+) and must be
-  tested against Tauri's IPC bootstrap at the first prototype.
+- `require-trusted-types-for 'script'` needs Svelte's `fragments: 'tree'` (Svelte 5.33+). Svelte's
+  `{@html}` still writes `innerHTML`, so it is not used; if it ever becomes necessary, it needs a
+  named, audited Trusted Types policy instead of `trusted-types 'none'`.
+- Tauri injects its bootstrap through WebView2's `AddScriptToExecuteOnDocumentCreated` and only adds
+  hashes to `script-src`/`style-src`; whether its scripts or `@tauri-apps/api` touch a Trusted Types
+  sink is unverified and must be tested at the first prototype.
