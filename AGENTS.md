@@ -51,7 +51,11 @@ GitHub issues are the only tracking system.
 
 - `status:backlog`, `status:ready`, `status:in-progress`, `status:review`, `status:blocked`
   (say why in a comment), `status:verified`. Every open issue has exactly one.
-- `area:core`, `area:monitors`, `area:cpu`, `area:gpu`, `area:ui`, `area:docs`, `area:governance`.
+- `area:core`, `area:monitors`, `area:cpu`, `area:gpu`, `area:ui`, `area:platform` (build, CI,
+  dependencies, packaging), `area:docs`, `area:governance`.
+- Workstreams are parent issues; a slice that one pull request can deliver is a GitHub sub-issue
+  of its parent, one level deep. A sub-issue's body names its parent (`Parent #N`). A parent is
+  done when its own acceptance is shown, not because its sub-issues are closed.
 - `priority:p0` to `priority:p3`: set by the owner only; an agent may propose one in a comment.
 - Starting work sets `status:in-progress`; opening its pull request sets `status:review`. A merged
   pull request does not close an issue by itself unless its acceptance is fully met.
