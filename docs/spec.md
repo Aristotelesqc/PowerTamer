@@ -106,8 +106,10 @@ Process Lasso can switch the active power plan through IdleSaver, Performance Mo
 load-dependent power profiles, and has per-process anti-sleep rules. Two tools switching the plan
 will fight.
 
-- Detect Lasso's active policies from its configuration (its documented JSON rule export where
-  available), not only from `ProcessGovernor.exe` (#22).
+- Detect Lasso's active policies from its actual, current configuration (the documented INI and
+  its location, governor and service mode, registry policies where relevant), not only from
+  `ProcessGovernor.exe` (#22). Its selective JSON rule export is for deliberate migration (#40),
+  not for detection: a saved export may be stale or incomplete.
 - If Lasso manages plans, or the state is uncertain, PowerTamer does not switch plans and says so;
   the user can change Lasso's settings.
 - Any external change of the active plan, from Lasso or another tool, is reconciled through the
