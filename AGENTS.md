@@ -18,11 +18,17 @@ model wrote it, except for links.
 ## Rules
 
 - English everywhere in the repository and on GitHub: code, comments, docs, commit messages,
-  issues, pull requests. Exception: a research report in `docs/research/` may be in the language
-  its prompt asked for; its provenance block and notes are in English.
+  issues, pull requests. Exceptions: translation catalogs (ADR 0003) hold their locale's text, and a
+  research report in `docs/research/` may be in the language its prompt asked for; its provenance
+  block and notes are in English.
 - Dates written in the repository or on GitHub are in **UTC**, ISO form (`2026-11-27`,
   `2026-11-27T19:46Z`). Take them from the clock, never from memory. No relative time words
   ("yesterday", "recently") in the repository.
+- No user-facing text in code ([ADR 0003](docs/adr/0003-interface-language.md)), including
+  accessibility attributes, window titles, the tray menu, notifications and the keep-awake reason:
+  message keys namespaced by section, plurals inside one key, an English source catalog and a
+  French catalog with the same keys and placeholders, both changed in the same pull request. The
+  core sends codes and data to the window, never sentences.
 - No new dependency without a demonstrated need, named in the pull request.
 - No fixed-interval polling in the core: react to Windows notifications (spec, principle 6).
 - Read settings from Windows at the moment they matter; never hardcode a timeout or a device.
