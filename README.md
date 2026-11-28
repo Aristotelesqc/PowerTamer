@@ -26,8 +26,10 @@ monitors turned off. PowerTamer adds the states in between.
 
 | Path | Content |
 |---|---|
-| [`docs/spec.md`](docs/spec.md) | First design notes: tiers, modules, coexistence rules |
-| [`docs/research/`](docs/research/) | Market research (in French) and the prompt that produced it |
+| [`AGENTS.md`](AGENTS.md) | Rules for contributors and agents: sources of truth, pull requests, issues |
+| [`docs/spec.md`](docs/spec.md) | Design notes: tiers, modules, coexistence rules |
+| [`docs/adr/`](docs/adr/) | Architecture decisions (settings window stack, CSS architecture, interface language) |
+| [`docs/research/`](docs/research/) | Research inputs (in French) with their prompts: market, UI stack, CSS architecture |
 | [`prototypes/pa278qv-guard/`](prototypes/pa278qv-guard/) | The working prototype that started the project |
 
 ## Origin
