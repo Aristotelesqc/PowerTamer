@@ -1,4 +1,10 @@
-[PHASE: PLANIFICATION]
+> **Provenance.** Gemini 4 Hydrogen (High) through the Antigravity CLI, plan mode, 2026-11-27, written before the repository existed. Raw report below; only this header was added (the first line of the original output, a `[PHASE: PLANIFICATION]` status marker, was removed).
+> Caller's verification notes (added 2026-11-28, after reviews on #5, #12 and #22):
+> - The hardware named in the report (Z790 board, i9-14900K, RTX 3080 Ti, ASUS ProArt and EIZO monitors) is the owner's reference PC: context for the research, not a product target or default.
+> - Correction: Process Lasso does have per-process and timed keep-awake (anti-sleep) rules and load-dependent power profiles, so its overlap with PowerTamer is larger than the report says.
+> - Unverified: the versions, release dates and footprint figures quoted for other tools.
+> - Weak claim: that VCP `0xD6 = 5` can leave some ASUS ProArt monitors unable to wake (the reference PA278QV woke fine).
+> - Not observed: a hot-plug loop on the EIZO CS2740.
 
 # Étude de marché et faisabilité technique : Utilitaire de gestion d’énergie Windows 11 (24/7 Workstation)
 

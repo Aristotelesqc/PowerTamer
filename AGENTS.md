@@ -37,6 +37,10 @@ model wrote it, except for links.
 - Keep machine-specific data out of the repository: no user names, local paths, serial numbers,
   monitor instance IDs or logs from a real machine. Model hardware IDs (EDID like `AUS2700`) in a
   quirks table are fine.
+- The owner's reference PC (its CPU, GPU, monitors and tools such as Process Lasso or Afterburner)
+  appears only as an example or as measured evidence, labelled as such. It is never a default, a
+  constant or an assumption in code, mockups or acceptance criteria: detect topology, devices,
+  vendors and capabilities at runtime, and keep model quirks as data.
 
 ## Pull requests
 
@@ -73,6 +77,8 @@ GitHub issues are the only tracking system.
   - `status:review`: its pull request awaits review;
   - `status:blocked`: say why in a comment;
   - `status:verified`: acceptance shown in a comment, waiting for the owner to close it.
+
+  Closing an issue removes its status label.
 - Area, at least one per issue: `area:core`, `area:monitors`, `area:cpu`, `area:gpu`, `area:ui`,
   `area:platform` (build, CI, dependencies, packaging), `area:docs`, `area:governance`.
 - `priority:p0` to `priority:p3`: set by the owner only; an agent may propose one in a comment.
@@ -92,7 +98,8 @@ See [ADR 0001](docs/adr/0001-ui-stack.md).
   are used without fallbacks or polyfills. Exception: `<input type="checkbox" switch>` is not in
   Chromium; build switches on `<input type="checkbox" role="switch">`.
 - Before writing HTML, CSS or client-side JS, consult Modern Web Guidance
-  (`npx -y modern-web-guidance@latest search "<query>"`, then `retrieve`).
+  (`npx -y modern-web-guidance@1.0.2 search "<query>"`, then `retrieve`). The version is pinned;
+  raise it only in a pull request after reviewing the new release.
 - No Tailwind, no CSS-in-JS, no component library. Plain CSS on the project's tokens.
 - No remote content in the window; keep the CSP strict.
 - No `{@html}` in Svelte templates (Trusted Types, ADR 0001).
